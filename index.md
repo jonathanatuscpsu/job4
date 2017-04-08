@@ -1,11 +1,11 @@
-# Mapping and Visualizing Crime
+# Mapping and Visualizing Crime in New York
 Zhaohu(Jonathan) Fan and Jingtong Feng  
 
 
 # Project 1
 
 ## Introduction
-The 2016 New York City crime dataset provides a special opportunity to play with data visually. As applied statisticians , we are interested in visualizing the crimes patterns near the neighborhood, Harlem. Since the dataset covers a wide variety of crimes, visualizing them all at once might wash out any patterns contained in smaller subgroups. We have elected to see if there are any patterns within three selected crimes (Robbery, Harrassment, and Felony Assault) that can be explored visually.
+The 2016 New York City crime dataset provides a special opportunity to play with data visually. As applied statisticians, we are interested in visualizing the crimes patterns near the neighborhood, Harlem. Since the dataset covers a wide variety of crimes, visualizing them all at once might wash out any patterns contained in smaller subgroups. We have elected to see if there are any patterns within three selected crimes (Robbery, Harrassment, and Felony Assault) that can be explored visually.
 
 ## The Data
 The data set is accessible from the NYC Open Data (https://data.cityofnewyork.us/Public-Safety/NYPD-Complaint-Data-Current-YTD/5uac-w243)
@@ -20,7 +20,7 @@ nycrime <- read.csv(file = "NYPD.csv", header = TRUE)
 crime <- dplyr::select(nycrime, CMPLNT_NUM, CMPLNT_FR_DT, CMPLNT_FR_TM, BORO_NM, 
     OFNS_DESC, LAW_CAT_CD, Latitude, Longitude, Lat_Lon)
 ```
-We select three crime types.
+We primarily focus on the following three types of crime, robbery, harrassment, and felony assault.
 
 ```r
 library(readr)
@@ -115,7 +115,7 @@ mapdata %>% group_by(OFNS_DESC) %>% summarise(n = n())
 ## 3        ROBBERY 15499
 ```
 ## Mapping
-We get the map of NYC.
+We build the map of NYC.
 
 
 ```r
@@ -144,7 +144,7 @@ ggmap(myMap, extent = "device", legend = "topleft") + geom_point(aes(x = as.nume
 ![](index_files/figure-html/unnamed-chunk-3-2.png)<!-- -->
 
 ## Comparing the three selected crimes
-The colors all overlap and obscure one another. No patterns are readily visible. So I decide to create a map by category will be more revealing.
+The colors all overlap and obscure one another. No patterns are readily visible. So we decide to create a map of three selected crimes will be more revealing.
 
 
 ```r
@@ -157,7 +157,7 @@ ggmap(myMap, extent = "device") + geom_point(aes(x = as.numeric(Longitude),
 ![](index_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
 
 ## Creating Density Map
-Now try a contour plot. We will estimate the density of crimes from our longitude and latitudes and use that to plot contours. This should more easily reveal patterns and hotspots for the selected crimes.
+Now let us try a contour plot. We estimate the density of crimes from longitude and latitudes, and use that to plot contours. This should more easily reveal patterns and hotspots for the selected crimes.
 
 ```r
 contours <- stat_density2d(aes(x = as.numeric(Longitude), y = as.numeric(Latitude), 
@@ -171,7 +171,7 @@ ggmap(myMap, extent = "device", legend = "topleft") + contours + scale_alpha_con
 ![](index_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
 
 ## Take a closer look of the Harlem area
-This map seems much more informative. It reveals a giant hotspot in the Harlem neighborhood, with smaller hotspots in the surrounding neighborhoods. Additionally, there are spots in the southern Bronx area. So pull the map in to focus on these areas. Additionally, lets look at maps by specific category of crime.
+This map seems much more informative. It reveals a giant hotspot in the Harlem neighborhood, with smaller hotspots in the surrounding neighborhoods. Additionally, there are spots in the southern Bronx area. So pull the map in to focus on these areas. Additionally, let us look at maps by specific category of crime.
 
 ```r
 lims <- coord_map(xlim = c(-73.74, -74.1), ylim = c(40.61, 40.92))
@@ -190,9 +190,14 @@ ggmap(myMap, extent = "device") + lims + contours + scale_alpha_continuous(range
 
 ![](index_files/figure-html/unnamed-chunk-6-2.png)<!-- -->
 
-
 ## Observation
-The overall structure of the contours seem to be about the same as the aggregate, with the largest hotspot centered in the harlem neighborhood southern Brox area. With Felony Assault and Robbery, these occurrences seem to be much more concentrated. Additionally, a hotspot for Harassment appears in the same area. Also, these three crime types generated the shades in the lower Manhattan area and Brooklyn area. 
+
+- The overall structure of the contours seem to be about the same as the aggregate, with the largest hotspot centered in the harlem neighborhood southern Brox area. 
+
+- With Felony Assault and Robbery, these occurrences seem to be much more concentrated. Additionally, a hotspot for Harassment appears in the same area.
+
+-These three crime types generated the shades in the lower Manhattan area and Brooklyn area. 
+
 ## References
 ##### GGPlot2 Documentation)[https://cran.r-project.org/web/packages/ggplot2/ggplot2.pdf].
 ##### GGPlot2 Quickstart [https://www.nceas.ucsb.edu/~frazier/RSpatialGuides/ggmap/ggmapCheatsheet.pdf].
