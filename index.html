@@ -237,7 +237,7 @@ setwd(&quot;D:/One_Jing&quot;)
 nycrime &lt;- read.csv(file = &quot;NYPD.csv&quot;, header = TRUE)
 crime &lt;- dplyr::select(nycrime, CMPLNT_NUM, CMPLNT_FR_DT, CMPLNT_FR_TM, BORO_NM, 
     OFNS_DESC, LAW_CAT_CD, Latitude, Longitude, Lat_Lon)</code></pre>
-<p>We primality focus on the following three types of crime, robbery, harrassment, and felony assault.</p>
+<p>We primarily focus on the following three types of crime, robbery, harrassment, and felony assault.</p>
 <pre class="r"><code>library(readr)
 library(lubridate)
 
@@ -322,7 +322,7 @@ mapdata %&gt;% group_by(OFNS_DESC) %&gt;% summarise(n = n())</code></pre>
 </div>
 <div id="mapping" class="section level2">
 <h2>Mapping</h2>
-<p>We get the map of NYC.</p>
+<p>We build the map of NYC.</p>
 <pre class="r"><code>library(ggplot2)
 library(ggmap)
 library(rgdal)
@@ -343,7 +343,7 @@ ggmap(myMap, extent = &quot;device&quot;, legend = &quot;topleft&quot;) + geom_p
 </div>
 <div id="comparing-the-three-selected-crimes" class="section level2">
 <h2>Comparing the three selected crimes</h2>
-<p>The colors all overlap and obscure one another. No patterns are readily visible. So I decide to create a map by category will be more revealing.</p>
+<p>The colors all overlap and obscure one another. No patterns are readily visible. So we decide to create a map of three selected crimes will be more revealing.</p>
 <pre class="r"><code>ggmap(myMap, extent = &quot;device&quot;) + geom_point(aes(x = as.numeric(Longitude), 
     y = as.numeric(Latitude), colour = OFNS_DESC), data = mapdata, size = 0.2) + 
     scale_colour_discrete(guide = &quot;none&quot;) + facet_wrap(~OFNS_DESC) + ggtitle(&quot;Crime in New York City&quot;) + 
@@ -352,7 +352,7 @@ ggmap(myMap, extent = &quot;device&quot;, legend = &quot;topleft&quot;) + geom_p
 </div>
 <div id="creating-density-map" class="section level2">
 <h2>Creating Density Map</h2>
-<p>Now try a contour plot. We will estimate the density of crimes from our longitude and latitudes and use that to plot contours. This should more easily reveal patterns and hotspots for the selected crimes.</p>
+<p>Now let us try a contour plot. We estimate the density of crimes from longitude and latitudes, and use that to plot contours. This should more easily reveal patterns and hotspots for the selected crimes.</p>
 <pre class="r"><code>contours &lt;- stat_density2d(aes(x = as.numeric(Longitude), y = as.numeric(Latitude), 
     fill = ..level.., alpha = ..level..), size = 0.1, data = mapdata, n = 200, 
     geom = &quot;polygon&quot;)
@@ -363,7 +363,7 @@ ggmap(myMap, extent = &quot;device&quot;, legend = &quot;topleft&quot;) + contou
 </div>
 <div id="take-a-closer-look-of-the-harlem-area" class="section level2">
 <h2>Take a closer look of the Harlem area</h2>
-<p>This map seems much more informative. It reveals a giant hotspot in the Harlem neighborhood, with smaller hotspots in the surrounding neighborhoods. Additionally, there are spots in the southern Bronx area. So pull the map in to focus on these areas. Additionally, lets look at maps by specific category of crime.</p>
+<p>This map seems much more informative. It reveals a giant hotspot in the Harlem neighborhood, with smaller hotspots in the surrounding neighborhoods. Additionally, there are spots in the southern Bronx area. So pull the map in to focus on these areas. Additionally, let us look at maps by specific category of crime.</p>
 <pre class="r"><code>lims &lt;- coord_map(xlim = c(-73.74, -74.1), ylim = c(40.61, 40.92))
 ggmap(myMap, extent = &quot;device&quot;, legend = &quot;topleft&quot;) + lims + contours + scale_alpha_continuous(range = c(0.25, 
     0.4), guide = &quot;none&quot;) + scale_fill_gradient(&quot;Violent\nCrime\nDensity&quot;) + 
@@ -376,7 +376,16 @@ ggmap(myMap, extent = &quot;device&quot;, legend = &quot;topleft&quot;) + lims +
 </div>
 <div id="observation" class="section level2">
 <h2>Observation</h2>
-<p>The overall structure of the contours seem to be about the same as the aggregate, with the largest hotspot centered in the harlem neighborhood southern Brox area. With Felony Assault and Robbery, these occurrences seem to be much more concentrated. Additionally, a hotspot for Harassment appears in the same area. Also, these three crime types generated the shades in the lower Manhattan area and Brooklyn area. ## References ##### GGPlot2 Documentation)[<a href="https://cran.r-project.org/web/packages/ggplot2/ggplot2.pdf" class="uri">https://cran.r-project.org/web/packages/ggplot2/ggplot2.pdf</a>]. ##### GGPlot2 Quickstart [<a href="https://www.nceas.ucsb.edu/~frazier/RSpatialGuides/ggmap/ggmapCheatsheet.pdf" class="uri">https://www.nceas.ucsb.edu/~frazier/RSpatialGuides/ggmap/ggmapCheatsheet.pdf</a>].</p>
+<p>The overall structure of the contours seem to be about the same as the aggregate, with the largest hotspot centered in the harlem neighborhood southern Brox area. With Felony Assault and Robbery, these occurrences seem to be much more concentrated. Additionally, a hotspot for Harassment appears in the same area. Also, these three crime types generated the shades in the lower Manhattan area and Brooklyn area.</p>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<div id="ggplot2-documentationhttpscran.r-project.orgwebpackagesggplot2ggplot2.pdf." class="section level5">
+<h5>GGPlot2 Documentation)[<a href="https://cran.r-project.org/web/packages/ggplot2/ggplot2.pdf" class="uri">https://cran.r-project.org/web/packages/ggplot2/ggplot2.pdf</a>].</h5>
+</div>
+<div id="ggplot2-quickstart-httpswww.nceas.ucsb.edufrazierrspatialguidesggmapggmapcheatsheet.pdf." class="section level5">
+<h5>GGPlot2 Quickstart [<a href="https://www.nceas.ucsb.edu/~frazier/RSpatialGuides/ggmap/ggmapCheatsheet.pdf" class="uri">https://www.nceas.ucsb.edu/~frazier/RSpatialGuides/ggmap/ggmapCheatsheet.pdf</a>].</h5>
+</div>
 </div>
 </div>
 
